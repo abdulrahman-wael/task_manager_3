@@ -1,0 +1,22 @@
+[tool.ruff]
+line-length = 80
+
+lint.select = [
+    "F"
+]
+
+lint.ignore = [
+    "E501"
+]
+
+exclude = [
+    ".venv",
+    "__pycache__",
+    ".pytest_cache",
+    ".ruff_cache",
+    "database.db",
+    "test.db"
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["api"]
