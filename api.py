@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 from contextlib import asynccontextmanager
 from typing import Annotated
 from fastapi import FastAPI, Depends, Query, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 from sqlmodel import SQLModel, Field, create_engine, Session, select
 
 load_dotenv()
@@ -15,6 +15,15 @@ class BaseTask(BaseModel):
     title: str
     description: str | None = None
     completed: bool = False
+
+    @field_validator("title")
+    def title_notna_formatted(v:str):
+        if not v:
+            raise ValueError("Title cannot be None")
+        if not v.strip():
+            raise ValueError("Title cannot be empty")
+        return v.strip().capitalize()
+        
 class Task(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     title: str = Field()

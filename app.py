@@ -14,9 +14,10 @@ with st.sidebar:
     if submit:
         if not title.strip():
             st.error("Title cannot be empty")
-        request = rq.post(getenv("API_URL"), json={"title":title, "description":description})
-        if request.status_code == 200:
-            st.success(f"Task with ID {request.json()["id"]} is successfully created")
+        else: 
+            request = rq.post(getenv("API_URL"), json={"title":title, "description":description})
+            if request.status_code == 200:
+                st.success(f"Task with ID {request.json()["id"]} is successfully created")
 
 st.title("FROGGY MORNING!")
 col1, col2 = st.columns([2,1])
