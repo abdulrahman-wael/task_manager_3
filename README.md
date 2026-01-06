@@ -1,6 +1,7 @@
 # What is this?
 
-* That's the third version of my Task manager. I'm trying here to be as independent as possible which creating this. The target was to not use even google search while coding this all (and most of the code is written in this way), but the docker part needed help by some google searches and AI prompts (also looking at previous versions of this Task manager :).
+* That's the third version of my Task manager. here is the [first version](https://github.com/abdulrahman-wael/task_manager), [second version](https://github.com/abdulrahman-wael/task_manager_2)
+* I'm trying here to be as independent as possible which creating this. The target was to not use even google search while coding this all (and most of the code is written in this way), but the docker part needed help by some google searches and AI prompts (also looking at previous versions of this Task manager :).
 * Tech stack: as the previous versions: I'm using these libraries/programs and concepts: fastapi, streamlit, docker, docker-compose, pytest, pyproject.toml and behind the scenes: ruff, mypy, black + .env (environment variables), .venv (virtual environment)
 * In the previous version I've documented the API file .. now I'll try document the APP (streamlit) file.
 
