@@ -1,3 +1,16 @@
+"""TheFROGtask streamlit app
+
+That's a one-page task management app that shows the tasks from the API_URL. 
+Functionality:
+1. Creates, updates (minimally), deletes, and shows tasks
+2. Validates the input data (task title, description)
+3. Has display options for tasks: (not completed tasks only or all) (what is the limit of shown tasks)
+
+Version: 1.0.0
+Author: Abdulrahman Wael
+Date: 6 Jan 2026
+"""
+
 from os import getenv
 from dotenv import load_dotenv
 import streamlit as st
@@ -8,6 +21,10 @@ load_dotenv()
 st.set_page_config(page_icon="👌", page_title="theFROGtask")
 
 with st.sidebar:
+    """Page sidebar (input data)
+
+    this sidebar accepts data in order to create one task: (title, description) .. after this ID is automatically created (of the last created ID +1) and completed is set to False.
+    """
     title_input = st.text_input(
         label="Title", max_chars=200, placeholder="what do you want?"
     )
@@ -31,12 +48,26 @@ with st.sidebar:
 st.title("Eat that frog!")
 col1, col2 = st.columns([2, 1])
 with col1:
+    """ Limit slider
+
+    This limits the shown tasks to a specific number and it can be changed easily with the slider.
+    """
     limit = st.slider("displyed tasks limit", min_value=5, max_value=100, value=20)
 with col2:
+    """ show completed tasks Checkbox
+
+    Checked = show all tasks including completed ones ... and the opposite is true.
+    """
     show_completed = st.checkbox("show completed tasks", value=False)
 
 all_tasks = rq.get(f"{getenv('API_URL')}/tasks/").json()
 for task in all_tasks:
+    """ main page logic
+
+    for each task in the database check if it's completed or not to know if it will be displayed or not ... 
+    then display the attributes or the task using an expander which shows the ID, completion_status, title outside 
+    and have description text, toggle_completed button, and delete button inside.
+    """
     if task["completed"] and not show_completed:
         continue
     with st.expander(
