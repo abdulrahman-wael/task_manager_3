@@ -74,7 +74,7 @@ async def create_one_task(session: sessionDep, input_task: CreateTask) -> Task:
 
 @app.get("/tasks/")
 async def read_all_tasks(
-    session: sessionDep, limit=Query(default=100, le=100), offset: int = 0
+    session: sessionDep, limit:Annotated[int, Query(le=100)] = 100, offset: int = 0
 ) -> list[Task]:
     tasks = session.exec(select(Task).limit(limit).offset(offset))
     return tasks
@@ -113,3 +113,7 @@ async def delete_one_task(session: sessionDep, id: int) -> dict:
     session.delete(task)
     session.commit()
     return {"status": "ok"}
+
+@app.get('/health')
+async def health_check():
+    return {'status':'healthy'}

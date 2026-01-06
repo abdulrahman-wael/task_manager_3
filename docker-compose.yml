@@ -1,0 +1,41 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    env_file:
+      - .env
+    volumes:
+      - ./data:/app/data
+    ports:
+      - "8000:8000"
+    networks:
+      - the_frog_task
+    healthcheck:
+      test: curl --fail http://localhost:8000/health || exit 1
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+      
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.app
+    ports:
+      - "8501:8501"
+    networks:
+      - the_frog_task
+    env_file:
+      - .env
+    depends_on:
+      api:
+        condition: service_healthy
+
+    
+networks:
+  the_frog_task:
+    driver: bridge
+
+volumes:
+  data:

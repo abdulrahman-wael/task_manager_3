@@ -20,42 +20,42 @@ with st.sidebar:
             st.error("Title cannot be empty")
         else:
             request = rq.post(
-                getenv("API_URL"),
+                f"{getenv('API_URL')}/tasks/",
                 json={"title": title_input, "description": description_area},
             )
             if request.status_code == 200:
                 st.success(
-                    f"Task with ID {request.json()["id"]} is successfully created"
+                    f"Task with ID {request.json()['id']} is successfully created"
                 )
 
-st.title("FROGGY MORNING!")
+st.title("Eat that frog!")
 col1, col2 = st.columns([2, 1])
 with col1:
     limit = st.slider("displyed tasks limit", min_value=5, max_value=100, value=20)
 with col2:
     show_completed = st.checkbox("show completed tasks", value=False)
 
-all_tasks = rq.get(getenv("API_URL")).json()
+all_tasks = rq.get(f"{getenv('API_URL')}/tasks/").json()
 for task in all_tasks:
     if task["completed"] and not show_completed:
         continue
     with st.expander(
-        f"[ {task["id"]} ] {task['title']}",
+        f"[ {task['id']} ] {task['title']}",
         icon=f"{'👌' if task['completed'] else '❄️'}",
     ):
         col1, col2, col3 = st.columns([3, 1, 1])
         with col1:
             description_area = st.write(
-                f"{task['description'] if task['description'] else "nothing special."}"
+                f"{task['description'] if task['description'] else 'nothing special.'}"
             )
         with col2:
             task_checkbox = st.button(
-                f"{"Done!" if not task["completed"] else "Not done yet!"}",
+                f"{'Done!' if not task['completed'] else 'Not done yet!'}",
                 key=f"toggle_task_{task['id']}",
             )
             if task_checkbox:
                 update_request = rq.patch(
-                    url=f"{getenv('API_URL')}{task['id']}",
+                    url=f"{getenv('API_URL')}/tasks/{task['id']}",
                     json={"completed": not task["completed"]},
                 )
                 print(update_request.json()["id"])
@@ -64,6 +64,6 @@ for task in all_tasks:
         with col3:
             delete_button = st.button("delete", key=f"delete_task_{task['id']}")
             if delete_button:
-                delete_request = rq.delete(f"{getenv('API_URL')}{task['id']}")
+                delete_request = rq.delete(f"{getenv('API_URL')}/tasks/{task['id']}")
                 if delete_request.status_code == 200:
                     st.rerun()
